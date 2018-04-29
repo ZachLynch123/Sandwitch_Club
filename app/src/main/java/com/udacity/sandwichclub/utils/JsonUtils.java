@@ -9,7 +9,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class JsonUtils {
@@ -23,12 +22,24 @@ public class JsonUtils {
         Sandwich sandwich = new Sandwich();
         sandwich.setMainName(swName.getString("mainName"));
         Log.v(TAG, "From JSON " + sandwich.getMainName());
+        sandwich.setAlsoKnownAs(getAka(json));
         sandwich.setPlaceOfOrigin(swData.getString("placeOfOrigin"));
         sandwich.setDescription(swData.getString("description"));
         sandwich.setImage(swData.getString("image"));
         sandwich.setIngredients(getIngredients(json));
-       Log.v(TAG, "From JSON " + sandwich.getDescription());
+        Log.v(TAG, "From JSON " + sandwich.getIngredients());
        return sandwich;
+    }
+
+    private static List<String> getAka(String json) throws JSONException {
+        ArrayList<String> akaData = new ArrayList<>();
+        JSONObject akaObj = new JSONObject(json);
+        JSONArray aka = akaObj.getJSONArray("mainName");
+        for (int i = 0; i < aka.length(); i++){
+            akaData.add(aka.getString(i));
+        }
+        return akaData;
+
     }
 
     private static List<String> getIngredients(String json) throws JSONException {
