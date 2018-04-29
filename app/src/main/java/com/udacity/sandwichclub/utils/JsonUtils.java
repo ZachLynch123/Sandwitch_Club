@@ -34,7 +34,8 @@ public class JsonUtils {
     private static List<String> getAka(String json) throws JSONException {
         ArrayList<String> akaData = new ArrayList<>();
         JSONObject akaObj = new JSONObject(json);
-        JSONArray aka = akaObj.getJSONArray("mainName");
+        JSONObject nameObj = akaObj.getJSONObject("name");
+        JSONArray aka = nameObj.getJSONArray("alsoKnownAs");
         for (int i = 0; i < aka.length(); i++){
             akaData.add(aka.getString(i));
         }
