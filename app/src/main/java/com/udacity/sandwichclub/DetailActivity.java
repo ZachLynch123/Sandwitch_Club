@@ -3,6 +3,7 @@ package com.udacity.sandwichclub;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,20 +14,25 @@ import com.udacity.sandwichclub.utils.JsonUtils;
 
 import org.json.JSONException;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class DetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_POSITION = "extra_position";
     private static final int DEFAULT_POSITION = -1;
-    private TextView mMainName;
-    private TextView mAka;
-    private TextView mPlaceOfOrigin;
-    private TextView mIngredients;
-    private TextView mDescription;
+    // thanks Udacity for the butterknife suggestion, makes boiler plate code a lot smaller :)
+    @BindView(R.id.sandwich_name) TextView mMainName;
+    @BindView(R.id.also_known_as) TextView mAka;
+    @BindView(R.id.origin) TextView mPlaceOfOrigin;
+    @BindView(R.id.ingredients) TextView mIngredients;
+    @BindView(R.id.description) TextView mDescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        ButterKnife.bind(this);
 
         ImageView ingredientsIv = findViewById(R.id.image_iv);
 
@@ -70,23 +76,11 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void populateUI(Sandwich sandwich) {
-        mMainName = findViewById(R.id.sandwich_name);
-        mAka = findViewById(R.id.also_known_as);
-        mPlaceOfOrigin = findViewById(R.id.origin);
-        mIngredients = findViewById(R.id.ingredients);
-        mDescription = findViewById(R.id.description);
         mMainName.setText(sandwich.getMainName());
-        StringBuilder builder = new StringBuilder();
-        for (String aka : sandwich.getAlsoKnownAs()){
-            builder.append(aka + "\n");
-        }
-        mAka.setText(builder.toString());
+
+        mAka.setText(TextUtils.join(", ", sandwich.getAlsoKnownAs()));
         mPlaceOfOrigin.setText(sandwich.getPlaceOfOrigin());
-        builder = new StringBuilder();
-        for (String ingredient : sandwich.getIngredients()){
-            builder.append(ingredient + "\n");
-        }
-        mIngredients.setText(builder.toString());
+        mIngredients.setText(TextUtils.join(", ", sandwich.getIngredients()));
         mDescription.setText(sandwich.getDescription());
 
 
