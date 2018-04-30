@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
@@ -16,6 +17,11 @@ public class DetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_POSITION = "extra_position";
     private static final int DEFAULT_POSITION = -1;
+    private TextView mMainName;
+    private TextView mAka;
+    private TextView mPlaceOfOrigin;
+    private TextView mIngredients;
+    private TextView mDescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +56,7 @@ public class DetailActivity extends AppCompatActivity {
             return;
         }
 
-        populateUI();
+        populateUI(sandwich);
         Picasso.with(this)
                 .load(sandwich.getImage())
                 .into(ingredientsIv);
@@ -63,7 +69,27 @@ public class DetailActivity extends AppCompatActivity {
         Toast.makeText(this, R.string.detail_error_message, Toast.LENGTH_SHORT).show();
     }
 
-    private void populateUI() {
+    private void populateUI(Sandwich sandwich) {
+        mMainName = findViewById(R.id.sandwich_name);
+        mAka = findViewById(R.id.also_known_as);
+        mPlaceOfOrigin = findViewById(R.id.origin);
+        mIngredients = findViewById(R.id.ingredients);
+        mDescription = findViewById(R.id.description);
+        mMainName.setText(sandwich.getMainName());
+        StringBuilder builder = new StringBuilder();
+        for (String aka : sandwich.getAlsoKnownAs()){
+            builder.append(aka + "\n");
+        }
+        mAka.setText(builder.toString());
+        mPlaceOfOrigin.setText(sandwich.getPlaceOfOrigin());
+        builder = new StringBuilder();
+        for (String ingredient : sandwich.getIngredients()){
+            builder.append(ingredient + "\n");
+        }
+        mIngredients.setText(builder.toString());
+        mDescription.setText(sandwich.getDescription());
+
 
     }
+
 }
